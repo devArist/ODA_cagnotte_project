@@ -18,8 +18,10 @@ class AcademicianAdmin(admin.ModelAdmin):
     ]
 
     def image_view(self, obj):
-        
-        return mark_safe(f'<img src="{obj.photo.url}" style="width:100px; height:100px" >')
+
+        return mark_safe(
+            f'<img src="{obj.photo.url}" style="width:100px; height:100px" >'
+        )
 
 
 @admin.register(models.Caisse)

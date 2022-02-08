@@ -41,5 +41,5 @@ class Caisse(Base):
     class Meta:
         verbose_name = "Caisse"
 
-    def __str__(self):
-        return self.academicien
+    def __unicode__(self):
+        return self.academician
