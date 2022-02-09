@@ -6,7 +6,7 @@ class AcademicianSerializer(serializers.ModelSerializer):
     class EmbendedSerializer(serializers.ModelSerializer):
         class Meta:
             model = models.Caisse
-            fields = ("id", "montant", "status", 'date_paiement')
+            fields = ("id", "amount", "status", 'payment_date')
 
     caisse_academicien = EmbendedSerializer(many=True, required=False)
 

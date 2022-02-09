@@ -11,7 +11,7 @@ class AcademicianAdmin(admin.ModelAdmin):
         "image_view",
         "last_name",
         "first_name",
-        "matricule",
+        "registration_number",
         "date_add",
         "date_update",
         "status",
@@ -26,4 +26,4 @@ class AcademicianAdmin(admin.ModelAdmin):
 
 @admin.register(models.Caisse)
 class CaisseAdmin(admin.ModelAdmin):
-    list_display = ["motif", "montant", "date_paiement", "status", "date_add"]
+    list_display = ["reason", "amount", "payment_date", "status", "date_add"]
