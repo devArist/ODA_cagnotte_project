@@ -96,6 +96,7 @@ def api_academician(request, registration_number: str):
 def api_payment(request, registration_number: str):
     message = ""
     success = False
+    today = date.today()
     
     if not academician_exists(registration_number):
         message = 'Erreur: Académicien introuvable !'
@@ -109,19 +110,32 @@ def api_payment(request, registration_number: str):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
-        today = date.today()
-        for d in academician.caisse_academicien.all():
-            if today.strftime('%Y-%m-%d') == d.payment_date:
-                message = "Paiement déjà éffectué pour aujourd'hui !"
-                
-                return Response({'message': message, 'success': success})
         
-        serializer = CaisseSerializer(academician, request.data)
-        if serializer.is_valid():
-            serializer.save()
-            message = 'Paiement bien effectué',
-            success = True
+        if not request.data or not request.data.get('registration_number') or not request.data.get('amount') or not request.data.get('reason'):
+            message = "Veuillez remplir les champs vides !"
+            return Response({'message': message, 'success': success})
+        else:
+            for d in academician.caisse_academicien.all():
+                if d.payment_date == today:
+                    message = "Paiement déjà éffectué pour aujourd'hui !"
+                    return Response({'message': message, 'success': success})
             
-            return Response({'message': message, 'success': success}, status=status.HTTP_201_CREATED)
+            models.Caisse.objects.create(
+                academician=academician, 
+                reason=request.data.get('reason'), 
+                amount=request.data.get('amount')
+                )
+            message = "Paiement bien éffectué !"
+            success = True
+            return Response({'message': message, 'success': success})
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # serializer = CaisseSerializer(data=request.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     message = 'Paiement bien effectué',
+        #     success = True
+            
+        #     return Response({'message': message, 'success': success}, status=status.HTTP_201_CREATED)
+        
+        
+        # return Response({'message': 'Hello world'})

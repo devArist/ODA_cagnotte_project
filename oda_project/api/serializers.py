@@ -16,6 +16,7 @@ class AcademicianSerializer(serializers.ModelSerializer):
 
 
 class CaisseSerializer(serializers.ModelSerializer):
+    academician = AcademicianSerializer()
     class Meta:
         model = models.Caisse
         exclude = ["date_update", "date_add"]
