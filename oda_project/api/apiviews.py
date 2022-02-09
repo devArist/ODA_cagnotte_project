@@ -5,6 +5,8 @@ from . import models
 from rest_framework import status
 from managers import api_pagination
 from datetime import date
+from rest_framework.parsers import FileUploadParser
+from rest_framework.decorators import parser_classes
 
 
 def academician_exists(registration_number):
@@ -22,6 +24,7 @@ def home(request):
 
 
 @api_view(["GET", "POST"])
+@parser_classes([FileUploadParser])
 def api_academicians(request):
     message = ""
     success = False
@@ -113,13 +116,7 @@ def api_payment(request, registration_number: str):
                 
                 return Response({'message': message, 'success': success})
         
-        caisse = models.Caisse(
-            academician=academician,
-            reason=request.data.get('reason'),
-            amount=request.data.get('amount'),
-        )
-        academician_serializer = AcademicianSerializer(academician)
-        serializer = CaisseSerializer(request.data)
+        serializer = CaisseSerializer(academician, request.data)
         if serializer.is_valid():
             serializer.save()
             message = 'Paiement bien effectué',

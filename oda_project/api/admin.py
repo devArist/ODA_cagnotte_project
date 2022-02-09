@@ -16,6 +16,7 @@ class AcademicianAdmin(admin.ModelAdmin):
         "date_update",
         "status",
     ]
+    list_display_links = ['last_name']
 
     def image_view(self, obj):
 
