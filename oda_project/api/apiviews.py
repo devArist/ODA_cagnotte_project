@@ -24,7 +24,6 @@ def home(request):
 
 
 @api_view(["GET", "POST"])
-@parser_classes([FileUploadParser])
 def api_academicians(request):
     message = ""
     success = False
